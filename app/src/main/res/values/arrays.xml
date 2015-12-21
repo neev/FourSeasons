@@ -37,4 +37,22 @@
         <item>@string/pref_art_pack_sunshine</item>
         <item>@string/pref_art_pack_cute_dogs</item>
     </string-array>
+
+
+    <string-array name="countries_list">
+
+        <item>@string/pref_country_label_australia</item>
+        <item>@string/pref_country_label_india</item>
+        <item>@string/pref_country_label_france</item>
+        <item>@string/pref_country_label_US</item>
+        <item>@string/pref_country_label_UK</item>
+    </string-array>
+
+    <string-array name="country_codes">
+        <item>@string/pref_country_code_australia</item>
+        <item>@string/pref_country_code_india</item>
+        <item>@string/pref_country_code_france</item>
+        <item>@string/pref_country_code_us</item>
+        <item>@string/pref_country_code_uk</item>
+    </string-array>
 </resources>

@@ -28,6 +28,7 @@ public class Utility {
                 && prefs.contains(context.getString(R.string.pref_location_longitude));
     }
 
+
     public static float getLocationLatitude(Context context) {
         SharedPreferences prefs
                 = PreferenceManager.getDefaultSharedPreferences(context);
@@ -47,6 +48,17 @@ public class Utility {
         return prefs.getString(context.getString(R.string.pref_location_key),
                 context.getString(R.string.pref_location_default));
     }
+
+
+    public static String getPreferredCountry(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString(context.getString(R.string.pref_country_key),
+                context.getString(R.string.pref_country_code_us));
+    }
+
+
+
+
 
     public static boolean isMetric(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -585,6 +597,7 @@ public class Utility {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor spe = sp.edit();
         spe.putInt(c.getString(R.string.pref_location_status_key), SunshineSyncAdapter.LOCATION_STATUS_UNKNOWN);
+
         spe.apply();
     }
 }

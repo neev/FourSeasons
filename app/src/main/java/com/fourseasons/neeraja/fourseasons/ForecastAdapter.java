@@ -56,10 +56,12 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
         public final TextView mDescriptionView;
         public final TextView mHighTempView;
         public final TextView mLowTempView;
+        public final TextView mLocationName;
 
         public ForecastAdapterViewHolder(View view) {
             super(view);
             mIconView = (ImageView) view.findViewById(R.id.list_item_icon);
+            mLocationName=(TextView) view.findViewById(R.id.location_name);
             mDateView = (TextView) view.findViewById(R.id.list_item_date_textview);
             mDescriptionView = (TextView) view.findViewById(R.id.list_item_forecast_textview);
             mHighTempView = (TextView) view.findViewById(R.id.list_item_high_textview);
@@ -152,6 +154,11 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
 
         // Read date from cursor
         long dateInMillis = mCursor.getLong(ForecastFragment.COL_WEATHER_DATE);
+
+        //Location name
+        String loc_name =mCursor.getString(ForecastFragment.COL_LOC_NAME);
+
+        forecastAdapterViewHolder.mLocationName.setText(loc_name);
 
         // Find TextView and set formatted date on it
         forecastAdapterViewHolder.mDateView.setText(Utility.getFriendlyDayString(mContext, dateInMillis, useLongToday));

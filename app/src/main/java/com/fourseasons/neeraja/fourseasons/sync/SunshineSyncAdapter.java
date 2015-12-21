@@ -98,7 +98,9 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         // We no longer need just the location String, but also potentially the latitude and
         // longitude, in case we are syncing based on a new Place Picker API result.
         Context context = getContext();
+        String countryQuery = Utility.getPreferredCountry(context);
         String locationQuery = Utility.getPreferredLocation(context);
+
         String locationLatitude = String.valueOf(Utility.getLocationLatitude(context));
         String locationLongitude = String.valueOf(Utility.getLocationLongitude(context));
 
@@ -119,7 +121,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
             // Possible parameters are avaiable at OWM's forecast API page, at
             // http://openweathermap.org/API#forecast
             final String FORECAST_BASE_URL =
-                    "http://api.openweathermap.org/data/2.5/forecast/daily?id=524901&APPID=fc52b3cd14d10817ab36e90fde221368\"";
+                    "http://api.openweathermap.org/data/2.5/forecast/daily?id=524901";
             final String QUERY_PARAM = "q";
             final String LAT_PARAM = "lat";
             final String LON_PARAM = "lon";
@@ -141,6 +143,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                         .appendQueryParameter(LON_PARAM, locationLongitude);
             } else {
                 uriBuilder.appendQueryParameter(QUERY_PARAM, locationQuery);
+
             }
 
             Uri builtUri = uriBuilder.appendQueryParameter(FORMAT_PARAM, format)
@@ -155,6 +158,8 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
+
+            Log.v(LOG_TAG, "MY URL : "+ countryQuery);
 
             // Read the input stream into a String
             InputStream inputStream = urlConnection.getInputStream();
@@ -180,7 +185,11 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
             }
             forecastJsonStr = buffer.toString();
             getWeatherDataFromJson(forecastJsonStr, locationQuery);
-        } catch (IOException e) {
+
+        }
+
+
+        catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
             // If the code didn't successfully get the weather data, there's no point in attempting
             // to parse it.
@@ -201,6 +210,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                 }
             }
         }
+
         return;
     }
 

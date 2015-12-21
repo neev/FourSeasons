@@ -39,17 +39,31 @@
             android:elevation="0dp"
             app:layout_scrollFlags="scroll|enterAlways"
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-            <ImageView
+            <!--<ImageView
                 android:layout_marginTop="?attr/actionBarSize"
                 android:layout_width="wrap_content"
                 android:layout_height="?attr/listPreferredItemHeight"
                 android:layout_gravity="center_horizontal"
                 android:contentDescription="@string/app_name"
                 android:scaleType="center"
-                android:src="@drawable/ic_logo"/>
+                android:src="@drawable/ic_logo"/>-->
+            <TextView
+                android:id="@+id/actionbarLocationName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/app_name"
+                android:scaleType="center"
+                android:text="Four Seasons"
+                android:textSize="32sp"
+                android:textStyle="italic"/>
             </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
+
+
+
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview_forecast"

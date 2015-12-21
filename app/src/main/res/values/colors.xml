@@ -39,4 +39,10 @@
     <!-- the color used for the low temperature in the forecast list -->
     <color name="forecast_low_text">#607D8B</color>
 
+    <color name="snow4">#8b8989</color>
+    <color name="whitesmoke">#f5f5f5</color>
+    <color name="lightsteelblue">#b0c4de</color>
+    <color name="lightsteelpink">#ff6ec7</color>
+
+
 </resources>

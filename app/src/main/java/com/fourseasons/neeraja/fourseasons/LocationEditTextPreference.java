@@ -25,6 +25,7 @@ import android.preference.EditTextPreference;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -34,12 +35,13 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
 public class LocationEditTextPreference extends EditTextPreference {
     static final private int DEFAULT_MINIMUM_LOCATION_LENGTH = 2;
     private int mMinLength;
-
+    GoogleApiClient mGoogleApiClient;
     public LocationEditTextPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         TypedArray a = context.getTheme().obtainStyledAttributes(
@@ -67,10 +69,13 @@ public class LocationEditTextPreference extends EditTextPreference {
     protected View onCreateView(ViewGroup parent) {
         View view = super.onCreateView(parent);
         View currentLocation = view.findViewById(R.id.current_location);
+
+
         currentLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Context context = getContext();
+
 
                 // Launch the Place Picker so that the user can specify their location, and then
                 // return the result to SettingsActivity.
@@ -86,22 +91,17 @@ public class LocationEditTextPreference extends EditTextPreference {
                     settingsActivity.startActivityForResult(
                             builder.build(context), SettingsActivity.PLACE_PICKER_REQUEST);
 
-                } catch (GooglePlayServicesNotAvailableException
-                        | GooglePlayServicesRepairableException e) {
-                    // What did you do?? This is why we check Google Play services in onResume!!!
-                    // The difference in these exception types is the difference between pausing
-                    // for a moment to prompt the user to update/install/enable Play services vs
-                    // complete and utter failure.
-                    // If you prefer to manage Google Play services dynamically, then you can do so
-                    // by responding to these exceptions in the right moment. But I prefer a cleaner
-                    // user experience, which is why you check all of this when the app resumes,
-                    // and then disable/enable features based on that availability.
+                } catch (GooglePlayServicesRepairableException e) {
+                    Log.d("PlacesAPI Demo", "GooglePlayServicesRepairableException thrown");
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    Log.d("PlacesAPI Demo", "GooglePlayServicesNotAvailableException thrown");
                 }
             }
         });
 
         return view;
     }
+
 
     @Override
     protected void showDialog(Bundle state) {

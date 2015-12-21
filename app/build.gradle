@@ -20,7 +20,7 @@ android {
     }
     buildTypes.each {
         apply plugin: 'build-announcements'
-        it.buildConfigField 'String', 'OPEN_WEATHER_MAP_API_KEY', {fc52b3cd14d10817ab36e90fde221368}
+        it.buildConfigField 'String', 'OPEN_WEATHER_MAP_API_KEY', MyOpenWeatherMapApiKey
     }
 }
 

@@ -31,6 +31,8 @@ import android.widget.ImageView;
 
 import com.fourseasons.neeraja.fourseasons.data.WeatherContract;
 import com.fourseasons.neeraja.fourseasons.sync.SunshineSyncAdapter;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
@@ -44,9 +46,12 @@ import com.google.android.gms.maps.model.LatLng;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class SettingsActivity extends PreferenceActivity
-        implements Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
+        implements Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener, GoogleApiClient.OnConnectionFailedListener {
     protected final static int PLACE_PICKER_REQUEST = 9090;
     private ImageView mAttribution;
+     String userAddress = "location";
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,8 +62,11 @@ public class SettingsActivity extends PreferenceActivity
         // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
         // updated when the preference changes.
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_location_key)));
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_country_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_units_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_art_pack_key)));
+
+
 
 
         // If we are using a PlacePicker location, we need to show attributions.
@@ -73,6 +81,8 @@ public class SettingsActivity extends PreferenceActivity
             setListFooter(mAttribution);
         }
     }
+
+
 
     // Registers a shared preference change listener that gets notified when preferences change
     @Override
@@ -153,6 +163,9 @@ public class SettingsActivity extends PreferenceActivity
     // start our synchronization here
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+
+
         if ( key.equals(getString(R.string.pref_location_key)) ) {
             // we've changed the location
             // Wipe out any potential PlacePicker latlng values so that we can use this text entry.
@@ -168,7 +181,23 @@ public class SettingsActivity extends PreferenceActivity
 
             Utility.resetLocationStatus(this);
             SunshineSyncAdapter.syncImmediately(this);
-        } else if ( key.equals(getString(R.string.pref_units_key)) ) {
+        }else if ( key.equals(getString(R.string.pref_country_key)) ) {
+            // we've changed the location
+            // Wipe out any potential PlacePicker latlng values so that we can use this text entry.
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove(getString(R.string.pref_location_latitude));
+            editor.remove(getString(R.string.pref_location_longitude));
+            editor.commit();
+
+            // Remove attributions for our any PlacePicker locations.
+            if (mAttribution != null) {
+                mAttribution.setVisibility(View.GONE);
+            }
+
+            Utility.resetLocationStatus(this);
+            SunshineSyncAdapter.syncImmediately(this);
+        }
+        else if ( key.equals(getString(R.string.pref_units_key)) ) {
             // units have changed. update lists of weather entries accordingly
             getContentResolver().notifyChange(WeatherContract.WeatherEntry.CONTENT_URI, null);
         } else if ( key.equals(getString(R.string.pref_location_status_key)) ) {
@@ -196,7 +225,7 @@ public class SettingsActivity extends PreferenceActivity
                 Place place = PlacePicker.getPlace(data, this);
                 String address = place.getAddress().toString();
                 LatLng latLong = place.getLatLng();
-
+                userAddress = address;
                 // If the provided place doesn't have an address, we'll form a display-friendly
                 // string from the latlng values.
                 if (TextUtils.isEmpty(address)) {
@@ -215,6 +244,8 @@ public class SettingsActivity extends PreferenceActivity
                         (float) latLong.latitude);
                 editor.putFloat(getString(R.string.pref_location_longitude),
                         (float) latLong.longitude);
+                editor.putString(getString(R.string.pref_location_name),
+                        (String) userAddress);
                 editor.commit();
 
                 // Tell the SyncAdapter that we've changed the location, so that we can update
@@ -240,5 +271,10 @@ public class SettingsActivity extends PreferenceActivity
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        
     }
 }

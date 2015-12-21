@@ -29,6 +29,13 @@
         custom:minLength="3"/>
 
     <ListPreference
+        android:key="@string/pref_country_key"
+        android:title="@string/pref_country_label"
+        android:defaultValue="us"
+        android:entries="@array/countries_list"
+        android:entryValues="@array/country_codes" />
+
+    <ListPreference
         android:title="@string/pref_units_label"
         android:key="@string/pref_units_key"
         android:defaultValue="@string/pref_units_metric"
