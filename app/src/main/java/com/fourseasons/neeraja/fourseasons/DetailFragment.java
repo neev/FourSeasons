@@ -49,7 +49,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     static final String DETAIL_URI = "URI";
     static final String DETAIL_TRANSITION_ANIMATION = "DTA";
 
-    private static final String FORECAST_SHARE_HASHTAG = " #SunshineApp";
+    private static final String FORECAST_SHARE_HASHTAG = " #FourSeasonsApp";
 
     private String mForecast;
     private Uri mUri;
@@ -259,8 +259,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             mPressureView.setContentDescription(getString(R.string.a11y_pressure, mPressureView.getText()));
             mPressureLabelView.setContentDescription(mPressureView.getContentDescription());
 
+            String shareHigh = "High: "+high;
+            String shareLow = "Low: "+low;
+
+
             // We still need this for the share intent
-            mForecast = String.format("%s - %s - %s/%s", dateText, description, high, low);
+            mForecast = String.format("%s - %s - %s/%s", dateText, description, shareHigh, shareLow);
 
         }
         AppCompatActivity activity = (AppCompatActivity)getActivity();
